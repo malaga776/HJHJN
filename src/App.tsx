@@ -1,11 +1,20 @@
 import React from 'react';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { Auth } from '@supabase/auth-helpers-react';
-import { supabase } from './lib/supabase';
+import { useAuthState } from 'react-firebase-hooks/auth';
+import { auth } from './lib/firebase';
 
 function App() {
   const { t } = useTranslation();
+  const [user, loading] = useAuthState(auth);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-primary-50 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-primary-500 border-t-transparent"></div>
+      </div>
+    );
+  }
 
   return (
     <Router>
@@ -19,11 +28,7 @@ function App() {
         </header>
         <main>
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <Auth
-              supabaseClient={supabase}
-              appearance={{ theme: 'default' }}
-              providers={[]}
-            />
+            {/* Authentication UI will be added here */}
           </div>
         </main>
       </div>
@@ -31,4 +36,4 @@ function App() {
   );
 }
 
-export default App;
+export default App
